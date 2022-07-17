@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Web.Mappings;
 using Web.Repositories;
+using Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,9 @@ services.AddDbContext<ApplicationDbContext>(
     ServerVersion.AutoDetect(configuration["DbConnection"])
 ));
 services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+services.AddScoped<IStudentService, StudentService>();
+services.AddScoped<IPrizeService, PrizeService>();
+services.AddAutoMapper(typeof(MappingProfile));
 
 services.AddControllers().AddNewtonsoftJson(options =>
 {

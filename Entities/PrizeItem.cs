@@ -11,6 +11,9 @@ namespace Web.Entities
     {
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string? PrizeId { get; set; }
+        [ForeignKey("PrizeId")]
+        public Prize? Prize { get; set; }
         public string? GiftCode { get; set; }
         [ForeignKey("GiftCode")]
         public Gift? Gift { get; set; }
