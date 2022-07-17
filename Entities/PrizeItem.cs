@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Web.Entities
 {
@@ -20,5 +22,12 @@ namespace Web.Entities
         public string? ScholarshipCode { get; set; }
         [ForeignKey("ScholarshipCode")]
         public Scholarship? Scholarship { get; set; }
+    }
+    public class PrizeItemConfigurations : IEntityTypeConfiguration<PrizeItem>
+    {
+        public void Configure(EntityTypeBuilder<PrizeItem> entityTypeBuilder)
+        {
+            entityTypeBuilder.HasKey(x => x.Id);
+        }
     }
 }

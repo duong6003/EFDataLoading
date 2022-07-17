@@ -34,8 +34,8 @@ using (var scope = app.Services.CreateScope())
 {
     try
     {
-        var repositoryWrapper = scope.ServiceProvider.GetService<IRepositoryWrapper>();
-        DbSeeding seeding = new(repositoryWrapper!);
+        var dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+        DbSeeding seeding = new(dbContext!);
         await seeding.Seeding();
     }
     catch (Exception ex)

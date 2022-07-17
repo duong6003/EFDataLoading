@@ -2,23 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Web.Entities;
 
 namespace Web.Repositories
 {
     public class DbSeeding
     {
-        private readonly IRepositoryWrapper repositoryWrapper;
+        private readonly ApplicationDbContext dbContext;
 
-        public DbSeeding(IRepositoryWrapper repositoryWrapper)
+        public DbSeeding(ApplicationDbContext dbContext)
         {
-            this.repositoryWrapper = repositoryWrapper;
+            this.dbContext = dbContext;
         }
         public async Task Seeding()
         {
-            if(!await repositoryWrapper.Gifts.AnyAsync())
+            Console.WriteLine("---> Start Seeding");
+            dbContext.Database.EnsureCreated();
+            if(!await dbContext.Gifts!.AnyAsync())
             {
-                await repositoryWrapper.Gifts.AddRangeAsync(new List<Gift>(){
+                await dbContext.Gifts!.AddRangeAsync(new List<Gift>(){
                     new Gift(){ Name = "Gift-1", Value = 10000 },
                     new Gift(){ Name = "Gift-2", Value = 20000 },
                     new Gift(){ Name = "Gift-3", Value = 30000 },
@@ -31,9 +34,9 @@ namespace Web.Repositories
                     new Gift(){ Name = "Gift-10", Value = 100000 }
                 });
             }
-            if(!await repositoryWrapper.Scholarships.AnyAsync())
+            if(!await dbContext.Scholarships!.AnyAsync())
             {
-                await repositoryWrapper.Scholarships.AddRangeAsync(new List<Scholarship>(){
+                await dbContext.Scholarships!.AddRangeAsync(new List<Scholarship>(){
                     new Scholarship(){ Name = "Scholarship-1", Value = 100000 },
                     new Scholarship(){ Name = "Scholarship-2", Value = 200000 },
                     new Scholarship(){ Name = "Scholarship-3", Value = 300000 },
@@ -46,9 +49,9 @@ namespace Web.Repositories
                     new Scholarship(){ Name = "Scholarship-10", Value = 1000000 }
                 });
             }
-            if(!await repositoryWrapper.Students.AnyAsync())
+            if(!await dbContext.Students!.AnyAsync())
             {
-                await repositoryWrapper.Students.AddRangeAsync(new List<Student>(){
+                await dbContext.Students!.AddRangeAsync(new List<Student>(){
                     new Student(){ Name = "Student-1" },
                     new Student(){ Name = "Student-2" },
                     new Student(){ Name = "Student-3" },
@@ -61,6 +64,8 @@ namespace Web.Repositories
                     new Student(){ Name = "Student-10" }
                 });
             }
+            await dbContext.SaveChangesAsync();
+            Console.WriteLine("---> Seeding Success");
         }
     }
 }
